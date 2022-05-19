@@ -1,0 +1,25 @@
+version: "3.9"
+services:
+  dynamodb-db:
+    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
+    image: "amazon/dynamodb-local:latest"
+    container_name: dynamodb-db
+    ports:
+      - "8007:8000"
+    volumes:
+      - "./docker/dynamodb:/home/dynamodblocal/data"
+    working_dir: /home/dynamodblocal
+  web:
+    build: .
+    command: bash -c "python manage.py makemigrations users sources dests transforms pipelines && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    # command: bash -c "python manage.py makemigrations users sources dests transforms pipelines && python manage.py migrate && python createDynamoTable.py && python manage.py runserver 0.0.0.0:8000"
+    environment:
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - AWS_DEFAULT_REGION=us-east-1
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - dynamodb-db
