@@ -14,7 +14,7 @@ pip install boto3
 Run Docker Container
 
 ```bash
-docker-compose up -d
+docker-compose up -d --force-recreate &&  sudo chmod 777 ./docker/dynamodb
 ```
 
 Run python script
