@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  postgres-source:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432'
+    volumes:
+      - ./docker/postgres_source:/var/lib/postgresql/data
+  postgres-dest:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432'
+    volumes:
+      - ./docker/postgres_dest:/var/lib/postgresql/data
