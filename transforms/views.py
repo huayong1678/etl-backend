@@ -23,11 +23,12 @@ class CreateTransformView(APIView):
     def post(self, request):
         token = request.COOKIES.get('jwt')
         payload = isAuthen(token)
-        print(payload)
+        # print(payload)
         data = request.data
-        print(request.data)
+        # print(request.data)
         response = dynamoCreateTransform(data, payload)
-        print(response)
+        # print(response)
+        # transform = Transform.objects.filter(owner_id=payload['id']).get(pk=pk)
         request.data['owner'] = payload['id']
         request.data['uuid'] = response['UUID']
         serializer = TransformSerializer(data=request.data)
@@ -35,7 +36,8 @@ class CreateTransformView(APIView):
         serializer.context['uuid'] = response['UUID']
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response({"HTTPStatusCode": response['HTTPStatusCode'], "uuid": response['UUID']})
+        # print(serializer.data['id'])
+        return Response({"HTTPStatusCode": response['HTTPStatusCode'], "uuid": response['UUID'], "pipeline_id": response['pipeline_id'], 'transform_id': serializer.data['id']})
 
 class DeleteTransformView(APIView):
     def get(self, request, pk):

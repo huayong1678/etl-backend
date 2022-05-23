@@ -6,7 +6,7 @@ import pandas as pd
 from db_handler.dbConnect import getEngine, sensitiveCensor
 
 def showData(connection_data):
-  print(connection_data)
+  # print(connection_data)
   try:
     connection_string = getEngine(connection_data)
     alchemyEngine   = create_engine(connection_string, pool_recycle=3600)
@@ -16,10 +16,13 @@ def showData(connection_data):
     pd.set_option('display.expand_frame_repr', False)
     if connection_data[-3] == True:
       df = sensitiveCensor(dataFrame)
+      print(getSchema(connection_data))
     else:
       df = dataFrame
+      print(getSchema(connection_data))
     dbConnection.close()
-    return df.head(10)
+    # test = df.dtypes
+    return [df.head(10), getSchema(connection_data)]
   except SQLAlchemyError as e:
     error = str(e.__dict__['orig'])
     return error

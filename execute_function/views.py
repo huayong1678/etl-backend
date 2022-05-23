@@ -152,7 +152,8 @@ class ApplyMigrateView(APIView):
                                         host, database, 0, table, port]
                 exp = exportData(connection_data, payload['id'], response)
                 print(exp)
-                upload = multi_part_upload_with_s3(exp[1], exp[2], payload['id'])
+                upload = multi_part_upload_with_s3(
+                    exp[1], exp[2], payload['id'])
                 print(upload)
                 imp = importData(dest_connection_data, exp[1], response)
                 rmv = removeLocalData(exp[1])

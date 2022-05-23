@@ -96,8 +96,9 @@ def dynamoCreateTransform(data, payload):
     response = dynamoCheck()
     u = uuid.uuid4()
     s = shortuuid.encode(u)
-    TAGS, SCRIPTS, SCHEMAS, pk, test = [], [], {}, data['pk'], []
-    TAGS.append(data['tags'])
+    TAGS, SCRIPTS, SCHEMAS, pk, test, pipeline_id = data['tags'], [
+    ], {}, data['pk'], [], str(data['pipeline_id'])
+    # print(data['pipeline_id'])
     if len(data['scripts']) != 0:
         for item in data['scripts']:
             SCRIPTS.append(item)
@@ -122,14 +123,16 @@ def dynamoCreateTransform(data, payload):
             Item={
                 'OWNER_ID': {'N': OWNER_ID},
                 'UUID': {'S': s},
-                'TAGS': {'SS': TAGS},
-                # 'SCRIPTS': {'SS': SCRIPTS}, 
+                'TAGS': {'S': TAGS},
+                # 'SCRIPTS': {'SS': SCRIPTS},
                 # 'SCHEMAS': {'M': SCHEMAS},
                 'SCHEMAS': {'L': test},
                 'PK': {'S': pk},
+                'PIPELINE_ID': {'N': pipeline_id}
             }
         )
-        return {"HTTPStatusCode": response['ResponseMetadata']['HTTPStatusCode'], "UUID": s}
+        # print(response)
+        return {"HTTPStatusCode": response['ResponseMetadata']['HTTPStatusCode'], "UUID": s, "pipeline_id": data['pipeline_id']}
     except ClientError as ce:
         return {ce.response['Error']['Code']: ce.response['Error']['Message']}
 
@@ -139,7 +142,8 @@ def dynamoGetTransform(data):
     if 'IS_DYNAMO_EXIST' in os.environ:
         dynamodb = boto3.resource('dynamodb', config=config)
     else:
-        dynamodb = boto3.resource('dynamodb', endpoint_url='http://localhost:8007', config=config)
+        dynamodb = boto3.resource(
+            'dynamodb', endpoint_url='http://localhost:8007', config=config)
     table = dynamodb.Table(TABLE_NAME)
     # response = table.get_item(
     #     Key={'UUID': data['uuid'], 'OWNER_ID': data['owner']})
@@ -153,8 +157,7 @@ def dynamoUpdateTransform(data, payload, uuid, id):
     response = dynamoCheck()
     # u = uuid.uuid4()
     # s = shortuuid.encode(u)
-    TAGS, SCRIPTS, SCHEMAS, PK = [], [], [], data['pk']
-    TAGS.append(data['tags'])
+    TAGS, SCRIPTS, SCHEMAS, PK = data['tags'], [], [], data['pk']
     if len(data['scripts']) != 0:
         for item in data['scripts']:
             SCRIPTS.append(item)
@@ -168,7 +171,8 @@ def dynamoUpdateTransform(data, payload, uuid, id):
         if 'IS_DYNAMO_EXIST' in os.environ:
             dynamodb = boto3.resource('dynamodb', config=config)
         else:
-            dynamodb = boto3.resource('dynamodb', endpoint_url='http://localhost:8007', config=config)
+            dynamodb = boto3.resource(
+                'dynamodb', endpoint_url='http://localhost:8007', config=config)
         table = dynamodb.Table('Transforms')
         table.update_item(
             Key={
