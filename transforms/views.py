@@ -23,8 +23,11 @@ class CreateTransformView(APIView):
     def post(self, request):
         token = request.COOKIES.get('jwt')
         payload = isAuthen(token)
+        print(payload)
         data = request.data
+        print(request.data)
         response = dynamoCreateTransform(data, payload)
+        print(response)
         request.data['owner'] = payload['id']
         request.data['uuid'] = response['UUID']
         serializer = TransformSerializer(data=request.data)
