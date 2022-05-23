@@ -15,7 +15,7 @@ def getEngine(connection_data):
 
 
 def testConnection(connection_data):
-    # print("testConnection: " + str(connection_data))
+    print("testConnection: " + str(connection_data))
     connection_string = getEngine(connection_data)
     # print("testConnection: " + connection_string)
     try:

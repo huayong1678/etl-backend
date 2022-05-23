@@ -118,6 +118,7 @@ class SourcePipelineView(APIView):
         isSensitive = pipeline_serializer.data['isSensitive']
         connection_data = [db_engine, user, password,
                            host, database, isSensitive, table, port]
+        print("View " + str(connection_data))
         connection = testConnection(connection_data)
         head = showData(connection_data)
         response = {"data" if connection == True else "error": head}
