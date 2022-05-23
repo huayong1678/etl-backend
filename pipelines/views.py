@@ -118,7 +118,7 @@ class SourcePipelineView(APIView):
         isSensitive = pipeline_serializer.data['isSensitive']
         connection_data = [db_engine, user, password,
                            host, database, isSensitive, table, port]
-        print("View " + str(connection_data))
+        print("View: " + str(connection_data))
         connection = testConnection(connection_data)
         head = showData(connection_data)
         response = {"data" if connection == True else "error": head}
@@ -173,10 +173,11 @@ class DBConnectionView(APIView):
             source_password, dest_password = source_serializer.data[
                 'password'], dest_serializer.data['password']
             source_host, dest_host = source_serializer.data['host'], dest_serializer.data['host']
+            source_port, dest_port = source_serializer.data['port'], dest_serializer.data['port']
             source_connection_data = [
-                source_db_engine, source_user, source_password, source_host, source_database]
+                source_db_engine, source_user, source_password, source_host, source_database, source_port]
             dest_connection_data = [
-                dest_db_engine, dest_user, dest_password, dest_host, dest_database]
+                dest_db_engine, dest_user, dest_password, dest_host, dest_database, dest_port]
             source_connection = testConnection(source_connection_data)
             dest_connection = testConnection(dest_connection_data)
             source_status = "Connection Success" if source_connection == True else "Unable to connect."
