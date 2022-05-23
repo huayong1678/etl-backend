@@ -28,8 +28,8 @@ DEBUG = False
 # DEBUG = True
 
 # Backend Address
-# ALLOWED_HOSTS = ['tp4y0cq38c.execute-api.us-east-1.amazonaws.com', 'localhost:8000']
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split()
+ALLOWED_HOSTS = ['tp4y0cq38c.execute-api.us-east-1.amazonaws.com', 'localhost', '127.0.0.1']
+# ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split()
 
 # Application definition
 
