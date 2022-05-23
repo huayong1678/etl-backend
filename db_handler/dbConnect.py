@@ -6,6 +6,7 @@ import pandas as pd
 
 def getEngine(connection_data):
     if connection_data[0] == "PG":
+        print(connection_data)
         connection_string = f'postgresql+psycopg2://{connection_data[1]}:{connection_data[2]}@{connection_data[3]}:{connection_data[-1]}/{connection_data[4]}'
         print("GetEngine: " + connection_string)
     else:
