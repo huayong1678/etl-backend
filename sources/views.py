@@ -14,8 +14,6 @@ from jwt_authentication.jwtAuth import *
 class CreateSource(APIView):
     def post(self, request):
         token = request.COOKIES.get('jwt')
-        print(request)
-        print(token)
         payload = isAuthen(token)
         serializer = SourceSerializer(data=request.data)
         serializer.context['owner_id'] = payload['id']

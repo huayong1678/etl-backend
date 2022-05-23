@@ -152,14 +152,12 @@ class ApplyMigrateView(APIView):
                                         host, database, 0, table, port]
                 exp = exportData(connection_data, payload['id'], response)
                 print(exp)
-                # ปิดไว้นะเพราะมันต้อง Upload ขึ้น S3 ของจริง
-                # upload = multi_part_upload_with_s3(exp[1], exp[2], payload['id'])
-                # print(upload)
+                upload = multi_part_upload_with_s3(exp[1], exp[2], payload['id'])
+                print(upload)
                 imp = importData(dest_connection_data, exp[1], response)
                 rmv = removeLocalData(exp[1])
             except:
                 return HttpResponseServerError()
         except:
             raise Http404
-        return Response({"export": exp[-1], "import": imp, "remove": rmv})
-        # return Response({"export": exp[-1], "upload": upload, "import": imp, "remove": rmv})
+        return Response({"export": exp[-1], "upload": upload, "import": imp, "remove": rmv})

@@ -5,6 +5,7 @@
 __pycache__
 db.sqlite3
 media
+.vscode/*
 
 # Backup files # 
 *.bak 
@@ -154,5 +155,3 @@ terraform/main-infra-with-public-rds
 s3-s-d
 # tmp/
 tmp/*
-docker/*
-/docker/
